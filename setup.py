@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.0.1' 
+VERSION = '1.1.0' 
 DESCRIPTION = 'An easy to use python sdk for interacting with paystack'
 LONG_DESCRIPTION = open('README.md', 'rt').read()
 # LONG_DESCRIPTION = 'This package makes it easy to accept and transfer money via paystack, a lot of redundancies have been abstracted from the paystack api and give developers a friendly method to interact with paystack programmatically'
@@ -17,7 +17,7 @@ setup(
         packages=find_packages(),
         install_requires=['requests'],
         url='https://github.com/i-wizard/easypaystack',
-        keywords=['python', 'paystack', 'easypaystack', 'payment', 'fintech'],
+        keywords=['python', 'paystack', 'easypaystack', 'payment', 'fintech', "transaction"],
         classifiers= [
             "Development Status :: 3 - Alpha",
             "Intended Audience :: Education",
@@ -25,5 +25,6 @@ setup(
             "Programming Language :: Python :: 3",
             "Operating System :: MacOS :: MacOS X",
             "Operating System :: Microsoft :: Windows",
+            "Operating System :: Linux :: Ubuntu, Fedora, Debian, CentOs",
         ]
 )
