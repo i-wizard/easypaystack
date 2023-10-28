@@ -1,5 +1,4 @@
 import requests
-import json
 
 from easypaystack.error_handler import *
 
@@ -7,7 +6,7 @@ from easypaystack.error_handler import *
 class PackageConfig():
     base_url = 'https://api.paystack.co/'
 
-    def __init__(self, secret_key=None):
+    def __init__(self, secret_key: str=None):
         if secret_key is None:
             raise AuthKeyError("Missing paystack secret key")
         self.secret_key = secret_key

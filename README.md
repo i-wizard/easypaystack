@@ -17,27 +17,51 @@ Alright let's get down to business
 
 Every call made will return a python dictionary containing a status code(2xx, 4xx)  and a **data** object.
 
-##### Resolve Account Number
-```py
-from easypaystack.verification import PaystackVerification
-```
-```py
-paystack = PaystackVerification(secret_key)
-response = paystack.resolve_account(account_number, bank_code)
-```
-
 **NOTE** whenever you import any class from the easypaystack sdk, always instantiate it with your secret key else it will raise a "MissinAuthKeyError"
 *Remember to never include your **secret key** ❌ in your code, instead use environment variables like the example below*.
 ```py
 from decouple import config
 
-paystack = PaystackVerification(config("PAYSTACK_SECRET"))
+secret_key = config("PAYSTACK_SECRET")
+paystack = PaystackVerification(secret_key)
+```
+
+## PAYMENTS
+### Initiate Payment
+Initiate a payment. This method initiates a pending transaction on paystack.
+Its is advisable to also create a pending transaction using this generated reference because you'll need it to verify this transaction after it's completed on the brower.
+```py
+from easypaystack.payment import Payment
+
+paystack = Payment(secret_key)
+response = paystack.initiate_payment(email="david@gmail.com", kobo_amount=5000, reference="uniquers453")
 ```
 ### Verify Payment
+Verify a payment. Use the reference generated during the transaction
+initiation to verify this payment
 ```py
+from easypaystack.verification import PaystackVerification
+
+paystack = PaystackVerification(secret_key)
 response = paystack.verify_payment(reference=payment_reference)
 ```
 
+### Charge Authorization
+This method is used in recurring payments like subscriptions or
+monthly repayment.
+The user's card must have been tokenized prior to using this method call.
+You only tokenize a card once. 
+To tokenize a card you need to use it for at least one payment transaction with minimum amount of about 100 naira then save the authorization code gotten from the payment verification response.
+Charge Authorization is a one step process, this means once you call this method the user is automatically debited, you don't need the user's input to perform this.
+The email address used here must be the same address used during the card tokenization
+```py
+from easypaystack.payment import Payment
+
+paystack = Payment(secret_key)
+response = paystack.charge_authorization(authorization_code="authorization_code", email="david@gmail.com", kobo_amount=5000, reference="uniquers453")
+```
+
+## TRANSFERS
 ### Create Recipient
 In order to do a transfer with paystack you need to first create a the transfer recipient.
 ```py
@@ -100,6 +124,16 @@ from easypaystack.transfers import Transfer
 
 paystack = Transfer(secret_key)
 response = paystack.get_transfers(perPage=50, page=1)
+```
+
+## UTILS
+#### Resolve Account Number
+```py
+from easypaystack.verification import PaystackVerification
+```
+```py
+paystack = PaystackVerification(secret_key)
+response = paystack.resolve_account(account_number, bank_code)
 ```
 ### Check Account balance
 ```py
